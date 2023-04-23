@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  password String
+  name     String
+  surname  String
+  address  String?
+  phone    String?
+  orders   Order[]
+  basket   Basket?
+}
+
+model Basket {
+  id          Int          @id @default(autoincrement())
+  user        User         @relation(fields: [userId], references: [id])
+  userId      Int          @unique
+  basketWears BasketWear[]
+}
+
+model BasketWear {
+  id       Int     @id @default(autoincrement())
+  basket   Basket? @relation(fields: [basketId], references: [id])
+  basketId Int?
+  wear     Wear    @relation(fields: [wearId], references: [id])
+  wearId   Int     @unique
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  status    String
+  address   String
+  phone     String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  wears     Wear[]
+  createdAt DateTime @default(now())
+}
+
+model Wear {
+  id         Int         @id @default(autoincrement())
+  name       String
+  price      Float
+  image      String
+  order      Order?      @relation(fields: [orderId], references: [id])
+  orderId    Int?
+  wearInfo   WearInfo[]
+  basketWear BasketWear?
+  brand      Brand?      @relation(fields: [brandId], references: [id])
+  brandId    Int?
+  type       Type?       @relation(fields: [typeId], references: [id])
+  typeId     Int?
+}
+
+model WearInfo {
+  id           Int    @id @default(autoincrement())
+  description  String
+  size         Int
+  color        String
+  manufacturer String
+  sku          String
+  wear         Wear?  @relation(fields: [wearId], references: [id])
+  wearId       Int?
+}
+
+model Brand {
+  id    Int    @id @default(autoincrement())
+  name  String
+  types Type[]
+  wears Wear[]
+}
+
+model Type {
+  id     Int     @id @default(autoincrement())
+  name   String
+  brands Brand[]
+  wears  Wear[]
+}
