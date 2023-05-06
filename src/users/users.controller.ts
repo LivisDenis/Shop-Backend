@@ -1,27 +1,10 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Request,
-  UseGuards
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { UsersService } from '@/src/users/users.service';
-import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @UseGuards(AuthGuard('local'))
-  @Post('auth/login')
-  async login(@Request() req) {
-    return req.user;
-  }
 
   @Post('create')
   create(@Body() userData: Prisma.UserCreateInput) {
@@ -43,8 +26,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.usersService.findOne({ id });
+  findOne(@Param('id') id: string) {
+    return this.usersService.findOne({ id: +id });
   }
 
   @Patch(':id')
@@ -52,11 +35,11 @@ export class UsersController {
     @Param('id') id: Prisma.UserWhereUniqueInput,
     @Body() updateUserData: Prisma.UserUpdateInput
   ) {
-    return this.usersService.update({ where: id, data: updateUserData });
+    return this.usersService.update({ where: { id: +id }, data: updateUserData });
   }
 
   @Delete(':id')
   remove(@Param('id') id: Prisma.UserWhereUniqueInput) {
-    return this.usersService.deleteUser(id);
+    return this.usersService.deleteUser({ id: +id });
   }
 }
