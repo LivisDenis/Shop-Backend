@@ -11,15 +11,22 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
   password String
   name     String
   surname  String
-  address  String?
-  phone    String?
   orders   Order[]
   basket   Basket?
+  contact  Contact[]
+}
+
+model Contact {
+  id      Int     @id @default(autoincrement())
+  phone   String?
+  address String?
+  User    User?   @relation(fields: [userId], references: [id])
+  userId  Int?
 }
 
 model Basket {
