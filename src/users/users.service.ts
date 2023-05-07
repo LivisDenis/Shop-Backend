@@ -1,15 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/src/prisma/prisma.service';
 import { User, Prisma } from '@prisma/client';
+import { RolesService } from '@/src/roles/roles.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private roles: RolesService) {}
 
-  async create(data: Prisma.UserCreateInput): Promise<User> {
-    return this.prisma.user.create({
-      data
+  async create(userData: Prisma.UserCreateInput): Promise<User> {
+    const role = await this.roles.getRoleByValue('USER');
+    const user = await this.prisma.user.create({
+      data: { ...userData, role: { connect: [{ value: role.value }] } },
+      include: { role: true }
     });
+
+    return user;
   }
 
   async findAll(params?: {
@@ -26,7 +31,8 @@ export class UsersService {
       take,
       cursor,
       where,
-      orderBy
+      orderBy,
+      include: { role: true }
     });
   }
 
