@@ -19,6 +19,12 @@ model User {
   orders   Order[]
   basket   Basket?
   contact  Contact[]
+  role     Role[]
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  user User[]
 }
 
 model Contact {
