@@ -10,10 +10,16 @@ import { Observable } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '@/src/auth/roles-auth.decorator';
+import { UsersService } from '@/src/users/users.service';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private jwtService: JwtService, private reflector: Reflector) {}
+  constructor(
+    private jwtService: JwtService,
+    private reflector: Reflector,
+    private usersService: UsersService
+  ) {}
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     try {
@@ -33,9 +39,11 @@ export class RolesGuard implements CanActivate {
         throw new UnauthorizedException({ message: 'Пользователь не авторизован' });
       }
 
-      const user = this.jwtService.verify(token);
-      req.user = user;
-      return user.roles.some((role) => requiredRoles.includes(role.value));
+      const user = this.jwtService.verify<User>(token);
+      return this.usersService.findOne({ id: user.id }).then((data) => {
+        req.user = data;
+        return data.roles.some((role) => requiredRoles.includes(role.value));
+      });
     } catch (e) {
       console.log(e);
       throw new HttpException('Нет доступа', HttpStatus.FORBIDDEN);

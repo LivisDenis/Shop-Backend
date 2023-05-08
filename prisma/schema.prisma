@@ -19,14 +19,14 @@ model User {
   orders   Order[]
   basket   Basket?
   contact  Contact[]
-  role     Role[]
+  roles    Role[]
 }
 
 model Role {
   id          Int    @id @default(autoincrement())
   value       String @unique
   description String
-  user        User[]
+  users       User[]
 }
 
 model Contact {
