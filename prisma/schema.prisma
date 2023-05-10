@@ -16,10 +16,21 @@ model User {
   password String
   name     String
   surname  String
+  shop     Shop[]
   orders   Order[]
   basket   Basket?
   contact  Contact[]
   roles    Role[]
+}
+
+model Shop {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+  image       String
+  User        User?  @relation(fields: [userId], references: [id])
+  userId      Int?
+  wears       Wear[]
 }
 
 model Role {
@@ -67,7 +78,7 @@ model Wear {
   id         Int         @id @default(autoincrement())
   name       String
   price      Float
-  image      String
+  image      String[]
   order      Order?      @relation(fields: [orderId], references: [id])
   orderId    Int?
   wearInfo   WearInfo[]
@@ -76,6 +87,8 @@ model Wear {
   brandId    Int?
   type       Type?       @relation(fields: [typeId], references: [id])
   typeId     Int?
+  Shop       Shop?       @relation(fields: [shopId], references: [id])
+  shopId     Int?
 }
 
 model WearInfo {
