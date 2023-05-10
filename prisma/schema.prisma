@@ -24,13 +24,13 @@ model User {
 }
 
 model Shop {
-  id          Int    @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   title       String
   description String
   image       String
-  User        User?  @relation(fields: [userId], references: [id])
   userId      Int?
-  wears       Wear[]
+  User        User?     @relation(fields: [userId], references: [id])
+  clothes     Clothes[]
 }
 
 model Role {
@@ -49,69 +49,69 @@ model Contact {
 }
 
 model Basket {
-  id          Int          @id @default(autoincrement())
-  user        User         @relation(fields: [userId], references: [id])
-  userId      Int          @unique
-  basketWears BasketWear[]
+  id            Int             @id @default(autoincrement())
+  user          User            @relation(fields: [userId], references: [id])
+  userId        Int             @unique
+  basketClothes BasketClothes[]
 }
 
-model BasketWear {
-  id       Int     @id @default(autoincrement())
-  basket   Basket? @relation(fields: [basketId], references: [id])
-  basketId Int?
-  wear     Wear    @relation(fields: [wearId], references: [id])
-  wearId   Int     @unique
+model BasketClothes {
+  id        Int     @id @default(autoincrement())
+  basket    Basket? @relation(fields: [basketId], references: [id])
+  basketId  Int?
+  clothes   Clothes @relation(fields: [clothesId], references: [id])
+  clothesId Int     @unique
 }
 
 model Order {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   status    String
   address   String
   phone     String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
   userId    Int
-  wears     Wear[]
-  createdAt DateTime @default(now())
+  clothes   Clothes[]
+  createdAt DateTime  @default(now())
 }
 
-model Wear {
-  id         Int         @id @default(autoincrement())
-  name       String
-  price      Float
-  image      String[]
-  order      Order?      @relation(fields: [orderId], references: [id])
-  orderId    Int?
-  wearInfo   WearInfo[]
-  basketWear BasketWear?
-  brand      Brand?      @relation(fields: [brandId], references: [id])
-  brandId    Int?
-  type       Type?       @relation(fields: [typeId], references: [id])
-  typeId     Int?
-  Shop       Shop?       @relation(fields: [shopId], references: [id])
-  shopId     Int?
+model Clothes {
+  id            Int            @id @default(autoincrement())
+  name          String
+  price         Float
+  image         String[]
+  order         Order?         @relation(fields: [orderId], references: [id])
+  orderId       Int?
+  clothesInfo   ClothesInfo[]
+  basketClothes BasketClothes?
+  brand         Brand?         @relation(fields: [brandId], references: [id])
+  brandId       Int?
+  type          Type?          @relation(fields: [typeId], references: [id])
+  typeId        Int?
+  Shop          Shop?          @relation(fields: [shopId], references: [id])
+  shopId        Int?
 }
 
-model WearInfo {
-  id           Int    @id @default(autoincrement())
+model ClothesInfo {
+  id           Int      @id @default(autoincrement())
   description  String
   size         Int
   color        String
   manufacturer String
   sku          String
-  wear         Wear?  @relation(fields: [wearId], references: [id])
-  wearId       Int?
+  clothes      Clothes? @relation(fields: [clothesId], references: [id])
+  clothesId    Int?
 }
 
 model Brand {
-  id    Int    @id @default(autoincrement())
-  name  String
-  types Type[]
-  wears Wear[]
+  id      Int       @id @default(autoincrement())
+  name    String
+  types   Type[]
+  clothes Clothes[]
 }
 
 model Type {
-  id     Int     @id @default(autoincrement())
-  name   String
-  brands Brand[]
-  wears  Wear[]
+  id      Int       @id @default(autoincrement())
+  name    String
+  brands  Brand[]
+  clothes Clothes[]
 }
