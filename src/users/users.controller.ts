@@ -19,17 +19,8 @@ export class UsersController {
   @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
   @Get('all')
-  findAll(
-    @Body()
-    params: {
-      skip?: number;
-      take?: number;
-      cursor?: Prisma.UserWhereUniqueInput;
-      where?: Prisma.UserWhereInput;
-      orderBy?: Prisma.UserOrderByWithRelationInput;
-    }
-  ) {
-    return this.usersService.findAll(params);
+  findAll() {
+    return this.usersService.findAll();
   }
 
   @Roles('ADMIN')
@@ -41,14 +32,14 @@ export class UsersController {
 
   @Patch(':id')
   update(
-    @Param('id') id: Prisma.UserWhereUniqueInput,
+    @Param('id') id: string,
     @Body() updateUserData: Prisma.UserUpdateInput
   ) {
-    return this.usersService.update({ where: { id: +id }, data: updateUserData });
+    return this.usersService.update({ id: +id }, updateUserData );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: Prisma.UserWhereUniqueInput) {
+  remove(@Param('id') id: string) {
     return this.usersService.deleteUser({ id: +id });
   }
 

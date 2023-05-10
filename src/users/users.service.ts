@@ -18,21 +18,8 @@ export class UsersService {
     return user;
   }
 
-  async findAll(params?: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.UserWhereUniqueInput;
-    where?: Prisma.UserWhereInput;
-    orderBy?: Prisma.UserOrderByWithRelationInput;
-  }): Promise<User[]> {
-    const { skip, take, cursor, where, orderBy } = params;
-
+  async findAll(): Promise<User[]> {
     return this.prisma.user.findMany({
-      skip,
-      take,
-      cursor,
-      where,
-      orderBy,
       include: { roles: true }
     });
   }
@@ -46,14 +33,10 @@ export class UsersService {
     });
   }
 
-  async update(params: {
-    where: Prisma.UserWhereUniqueInput;
-    data: Prisma.UserUpdateInput;
-  }): Promise<User> {
-    const { where, data } = params;
+  async update(userUniqueInput: Prisma.UserWhereUniqueInput, data: Prisma.UserUpdateInput): Promise<User> {
     return this.prisma.user.update({
       data,
-      where
+      where: userUniqueInput
     });
   }
 
@@ -68,10 +51,7 @@ export class UsersService {
     const role = await this.roles.getRoleByValue(dto.value);
 
     if (user && role) {
-      await this.update({
-        where: { id: dto.userId },
-        data: { roles: { connect: [{ value: role.value }] } }
-      });
+      await this.update({id: dto.userId}, {roles: {connect: [{value: role.value}]}});
       return dto;
     }
     throw new HttpException('Пользователь или роль не найдены', HttpStatus.NOT_FOUND);
