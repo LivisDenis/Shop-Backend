@@ -15,9 +15,6 @@ export class UsersController {
     return this.usersService.create(userData);
   }
 
-  @Roles('ADMIN')
-  @UseGuards(RolesGuard)
-  @UseGuards(JwtAuthGuard)
   @Get('all')
   findAll() {
     return this.usersService.findAll();
@@ -30,14 +27,14 @@ export class UsersController {
     return this.usersService.findOne({ id: +id });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateUserData: Prisma.UserUpdateInput
-  ) {
-    return this.usersService.update({ id: +id }, updateUserData );
+  update(@Param('id') id: string, @Body() updateUserData: Prisma.UserUpdateInput) {
+    return this.usersService.update({ id: +id }, updateUserData);
   }
 
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.deleteUser({ id: +id });
