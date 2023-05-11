@@ -76,9 +76,9 @@ model Order {
 
 model Clothes {
   id            Int            @id @default(autoincrement())
-  name          String
-  price         Float
-  image         String[]
+  name          String         @unique
+  price         String
+  image         Image[]
   order         Order?         @relation(fields: [orderId], references: [id])
   orderId       Int?
   clothesInfo   ClothesInfo[]
@@ -89,6 +89,13 @@ model Clothes {
   typeId        Int?
   Shop          Shop?          @relation(fields: [shopId], references: [id])
   shopId        Int?
+}
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  fileName  String
+  Clothes   Clothes? @relation(fields: [clothesId], references: [id])
+  clothesId Int?
 }
 
 model ClothesInfo {
