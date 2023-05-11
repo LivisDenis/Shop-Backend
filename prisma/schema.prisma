@@ -111,14 +111,14 @@ model ClothesInfo {
 
 model Brand {
   id      Int       @id @default(autoincrement())
-  name    String
+  name    String    @unique
   types   Type[]
   clothes Clothes[]
 }
 
 model Type {
   id      Int       @id @default(autoincrement())
-  name    String
+  name    String    @unique
   brands  Brand[]
   clothes Clothes[]
 }
