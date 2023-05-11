@@ -8,6 +8,7 @@ import { ShopModule } from './shop/shop.module';
 import { FilesModule } from './files/files.module';
 import { ClothesModule } from './clothes/clothes.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { BrandTypeModule } from './brand-type/brand-type.module';
 import * as path from 'path';
 
 @Module({
@@ -22,7 +23,8 @@ import * as path from 'path';
     ClothesModule,
     ServeStaticModule.forRoot({
       rootPath: path.resolve(__dirname, 'static')
-    })
+    }),
+    BrandTypeModule
   ],
   controllers: [],
   providers: []
