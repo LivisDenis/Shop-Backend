@@ -16,12 +16,14 @@ import { Prisma } from '@prisma/client';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Roles } from '@/src/auth/roles-auth.decorator';
 import { JwtAuthGuard } from '@/src/auth/guards/jwt-auth.guard';
+import {RolesGuard} from "@/src/auth/guards/roles.guard";
 
 @Controller('clothes')
 export class ClothesController {
   constructor(private readonly clothesService: ClothesService) {}
 
   @Roles('SHOP')
+  @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
   @Post('create')
   @UseInterceptors(FilesInterceptor('image'))
@@ -40,6 +42,7 @@ export class ClothesController {
   }
 
   @Roles('SHOP')
+  @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateClotheDto: UpdateClothesDto) {

@@ -34,6 +34,7 @@ export class UsersController {
   }
 
   @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
