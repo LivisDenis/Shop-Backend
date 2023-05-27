@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from '@/src/users/users.module';
-import { AuthModule } from '@/src/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { RolesModule } from './roles/roles.module';
 import { PrismaModule } from '@/src/prisma/prisma.module';
@@ -9,6 +8,7 @@ import { FilesModule } from './files/files.module';
 import { ClothesModule } from './clothes/clothes.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { BrandTypeModule } from './brand-type/brand-type.module';
+import { AuthModule } from '@/src/auth/auth.module';
 import * as path from 'path';
 
 @Module({

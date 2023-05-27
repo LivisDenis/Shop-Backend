@@ -1,9 +1,9 @@
-import {Controller, Get, Post, Body, Param, Delete, UseGuards} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards } from '@nestjs/common';
 import { BrandService } from './brand.service';
-import {Prisma} from "@prisma/client";
-import {Roles} from "@/src/auth/roles-auth.decorator";
-import {RolesGuard} from "@/src/auth/guards/roles.guard";
-import {JwtAuthGuard} from "@/src/auth/guards/jwt-auth.guard";
+import { Prisma } from '@prisma/client';
+import { AuthenticatedGuard } from '@/src/auth/common/guards/authenticated.guard';
+import { Roles } from '@/src/auth/roles-auth.decorator';
+import { RolesGuard } from '@/src/auth/common/guards/roles.guard';
 
 @Controller('brand')
 export class BrandController {
@@ -11,7 +11,7 @@ export class BrandController {
 
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthenticatedGuard)
   @Post('create')
   create(@Body() createBrandData: Prisma.BrandCreateInput) {
     return this.brandService.create(createBrandData);
@@ -24,9 +24,9 @@ export class BrandController {
 
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthenticatedGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.brandService.remove({id: +id});
+    return this.brandService.remove({ id: +id });
   }
 }

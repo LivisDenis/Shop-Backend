@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ShopService } from './shop.service';
 import { Prisma } from '@prisma/client';
-import { JwtAuthGuard } from '@/src/auth/guards/jwt-auth.guard';
+import { AuthenticatedGuard } from '@/src/auth/common/guards/authenticated.guard';
+import { RolesGuard } from '@/src/auth/common/guards/roles.guard';
 import { Roles } from '@/src/auth/roles-auth.decorator';
-import {RolesGuard} from "@/src/auth/guards/roles.guard";
 
 @Controller('shop')
 export class ShopController {
@@ -11,7 +11,7 @@ export class ShopController {
 
   @Roles('SHOP')
   @UseGuards(RolesGuard)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthenticatedGuard)
   @Post('create')
   create(@Body() createShopData: Prisma.ShopCreateInput) {
     return this.shopService.create(createShopData);
@@ -29,13 +29,13 @@ export class ShopController {
 
   @Roles('SHOP')
   @UseGuards(RolesGuard)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthenticatedGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateShopData: Prisma.ShopUpdateInput) {
     return this.shopService.update(+id, updateShopData);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthenticatedGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.shopService.remove({ id: +id });

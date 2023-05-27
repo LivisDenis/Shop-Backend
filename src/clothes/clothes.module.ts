@@ -4,7 +4,7 @@ import { ClothesController } from './clothes.controller';
 import { PrismaModule } from '@/src/prisma/prisma.module';
 import { FilesModule } from '@/src/files/files.module';
 import { AuthModule } from '@/src/auth/auth.module';
-import {UsersModule} from "@/src/users/users.module";
+import { UsersModule } from '@/src/users/users.module';
 
 @Module({
   imports: [PrismaModule, FilesModule, AuthModule, UsersModule],

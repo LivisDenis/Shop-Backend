@@ -14,9 +14,9 @@ import { ClothesService } from './clothes.service';
 import { UpdateClothesDto } from './dto/update-clothes.dto';
 import { Prisma } from '@prisma/client';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { AuthenticatedGuard } from '@/src/auth/common/guards/authenticated.guard';
 import { Roles } from '@/src/auth/roles-auth.decorator';
-import { JwtAuthGuard } from '@/src/auth/guards/jwt-auth.guard';
-import {RolesGuard} from "@/src/auth/guards/roles.guard";
+import { RolesGuard } from '@/src/auth/common/guards/roles.guard';
 
 @Controller('clothes')
 export class ClothesController {
@@ -24,7 +24,7 @@ export class ClothesController {
 
   @Roles('SHOP')
   @UseGuards(RolesGuard)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthenticatedGuard)
   @Post('create')
   @UseInterceptors(FilesInterceptor('image'))
   create(@Body() createClotheData: Prisma.ClothesCreateInput, @UploadedFiles() image) {
@@ -43,13 +43,13 @@ export class ClothesController {
 
   @Roles('SHOP')
   @UseGuards(RolesGuard)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthenticatedGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateClotheDto: UpdateClothesDto) {
     return this.clothesService.update({ id: +id }, updateClotheDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthenticatedGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.clothesService.remove({ id: +id });

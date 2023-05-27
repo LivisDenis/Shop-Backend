@@ -3,6 +3,9 @@ import { UsersModule } from '@/src/users/users.module';
 import { AuthService } from '@/src/auth/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from '@/src/auth/auth.controller';
+import { PassportModule } from '@nestjs/passport';
+import { SessionSerializer } from '@/src/auth/session.serializer';
+import { LocalStrategy } from '@/src/auth/common/strategies/local.strategy';
 
 @Module({
   imports: [
@@ -12,9 +15,10 @@ import { AuthController } from '@/src/auth/auth.controller';
       signOptions: {
         expiresIn: '24h'
       }
-    })
+    }),
+    PassportModule.register({ session: true })
   ],
-  providers: [AuthService],
+  providers: [AuthService, LocalStrategy, SessionSerializer],
   controllers: [AuthController],
   exports: [AuthService, JwtModule]
 })
