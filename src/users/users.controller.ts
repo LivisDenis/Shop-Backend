@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { UsersService } from '@/src/users/users.service';
 import { AddRoleDto } from '@/src/users/dto/add-role.dto';
@@ -45,9 +36,10 @@ export class UsersController {
     return this.usersService.deleteUser({ id: +id });
   }
 
-  @Roles('ADMIN')
+  @Roles('GOD')
   @UseGuards(RolesGuard)
-  @Post('role')
+  @UseGuards(AuthenticatedGuard)
+  @Post('add-role')
   addRole(@Body() dto: AddRoleDto) {
     return this.usersService.addRole(dto);
   }

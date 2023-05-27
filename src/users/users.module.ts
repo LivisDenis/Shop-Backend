@@ -6,7 +6,7 @@ import { PrismaModule } from '@/src/prisma/prisma.module';
 import { RolesModule } from '@/src/roles/roles.module';
 
 @Module({
-  imports: [forwardRef(() => AuthModule), PrismaModule, RolesModule],
+  imports: [forwardRef(() => AuthModule), forwardRef(() => RolesModule), PrismaModule],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService]

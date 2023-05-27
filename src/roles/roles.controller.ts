@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { RolesService, RoleValues } from '@/src/roles/roles.service';
+import { RolesService } from '@/src/roles/roles.service';
 import { Prisma, Role } from '@prisma/client';
 import { AuthenticatedGuard } from '@/src/auth/common/guards/authenticated.guard';
 import { RolesGuard } from '@/src/auth/common/guards/roles.guard';
 import { Roles } from '@/src/auth/roles-auth.decorator';
+import { RoleValues } from '@/src/roles/types';
 
 @Controller('roles')
 export class RolesController {
