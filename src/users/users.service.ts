@@ -3,7 +3,7 @@ import { PrismaService } from '@/src/prisma/prisma.service';
 import { User, Role, Prisma } from '@prisma/client';
 import { RolesService } from '@/src/roles/roles.service';
 import * as bcrypt from 'bcryptjs';
-import { AddRoleDto } from '@/src/users/dto/add-role.dto';
+import { AddRoleDto } from './dto';
 
 @Injectable()
 export class UsersService {
